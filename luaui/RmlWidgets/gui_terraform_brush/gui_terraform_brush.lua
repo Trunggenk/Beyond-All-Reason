@@ -11121,6 +11121,7 @@ local function attachEventListeners()
 	local defaultsBtn = getCachedEl(doc, "btn-defaults")
 	if defaultsBtn then
 		defaultsBtn:AddEventListener("click", function(event)
+			local dm = widgetState.dmHandle
 			playSound("reset")
 			if WG.TerraformBrush then
 				WG.TerraformBrush.setRadius(100)
@@ -12906,12 +12907,12 @@ function widget:Update()
 		if fillBtn then
 			fillBtn:SetClass("disabled", mbActive or fpActive or gbActive or wbActive or lpActive or noiseActive or (tfActive and tfState and tfState.mode == "lower") or false)
 		end
+
+		local doc = widgetState.document
 		local clayBtn = doc and getCachedEl(doc, "btn-clay-mode")
 		if clayBtn then
 			clayBtn:SetClass("disabled", mbActive or lpActive or false)
 		end
-
-		local doc = widgetState.document
 
 		-- Blue-dot hint gating: hide dots already seen or when tips disabled,
 		-- and handle chip 2-pulse animations scheduled by tf_environment listeners.
@@ -13298,6 +13299,8 @@ function widget:Update()
 						widgetState.dmHandle.tfRestoreStrengthStr = v
 					end
 				end
+				local dm = widgetState.dmHandle
+				local dustEl = getCachedEl(doc, "btn-dust-effects")
 
 				local sliderCapMax = getCachedEl(doc, "slider-cap-max")
 				if sliderCapMax and ds ~= "capmax" then

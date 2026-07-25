@@ -1265,10 +1265,13 @@ local prevQuitscreen = false
 local pauseCheckTimer = 0
 local lastPauseCheckClock = os_clock()
 local canPauseGame = (isSinglePlayer or isReplay) and pauseGameWhenSingleplayer
+local isClientPaused = false
 local function checkQuitscreen()
 	if not canPauseGame then
 		return
 	end
+	local _, _, paused = Spring.GetGameState()
+	isClientPaused = paused or false
 	quitscreen = (WG.topbar and WG.topbar.showingQuit() or false)
 	if prevQuitscreen ~= quitscreen then
 		if quitscreen and isClientPaused and not showToggledOff then
@@ -10692,7 +10695,7 @@ function widget:GetConfigData()
 		currentGroupTab = currentGroupTab,
 		show = show,
 		waterDetected = waterDetected,
-		customPresets = customPresets,
+		customPresets = customPresetOptions,
 		changesRequireRestart = changesRequireRestart,
 		requireRestartDefaults = requireRestartDefaults,
 
