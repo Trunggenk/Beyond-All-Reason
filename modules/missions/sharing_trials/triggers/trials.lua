@@ -1,0 +1,27 @@
+-- Sharing trials: dogfood prompts for the sharing API as mission verbs.
+-- Each becomes a trigger authored through the editor once the vocabulary
+-- exists; until then the gate should refuse the sketches below.
+--
+-- PROMPT: player shares 200 metal to an ally -> complete "first_gift"
+--   When(Share.Metal(Team.Player, Team.Ally, 200))
+--     .Do(Objective("first_gift").Complete())
+--
+-- PROMPT: an ally shares any energy back -> complete "reciprocity"
+--   When(Share.Energy(Team.Ally, Team.Player, 1))
+--
+-- PROMPT: player transfers a builder unit to an ally -> complete "lend_lease"
+--   When(Share.Unit(Team.Player, Team.Ally, UnitDef("armck")))
+--
+-- PROMPT: a sharing policy denies a transfer -> complete "felt_the_gate"
+--   When(Policy.Denied(Team.Player))
+--
+-- PROMPT: team-wide shared metal exceeds 1000 total -> complete "commonwealth"
+--   When(Share.Metal.Total(Team.Player, 1000))
+--
+-- PROMPT: tech sharing unlocks (keystone built) -> complete "open_source"
+--   When(Tech.Shared(Team.Player, Team.Ally))
+--
+-- PROMPT: victory when "first_gift" and "reciprocity" are both complete
+--   When(Objective("first_gift").IsComplete())
+--     .When(Objective("reciprocity").IsComplete())
+--     .Do(MatchFlow.Victory(Team.Player))
