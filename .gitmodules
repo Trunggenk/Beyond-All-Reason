@@ -2,3 +2,9 @@
 	path = recoil-lua-library
 	url = https://github.com/beyond-all-reason/recoil-lua-library.git
 	branch = main
+[submodule "spring"]
+	path = spring
+	url = https://github.com/spring/spring
+[submodule "BYAR-Chobby"]
+	path = BYAR-Chobby
+	url = https://github.com/beyond-all-reason/BYAR-Chobby
