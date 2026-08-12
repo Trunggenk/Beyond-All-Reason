@@ -1,7 +1,7 @@
 -- Mod Author: CrossGamer
 -- Mod Name: Scavenger Beacon to Nuke Silo
 
-local function makeSilo(beaconName)
+local function makeSilo(beaconName, tier)
     if UnitDefs and UnitDefs[beaconName] and UnitDefs["armsilo"] then
         local armsilo_wdefs = UnitDefs["armsilo"].weapondefs
         local armsilo_weapons = UnitDefs["armsilo"].weapons
@@ -21,6 +21,18 @@ local function makeSilo(beaconName)
                     scav.weapondefs[wname][k] = v
                 end
             end
+
+            -- Adjust stockpiletime based on tier
+            if scav.weapondefs[wname].stockpiletime then
+                if tier == 2 then
+                    scav.weapondefs[wname].stockpiletime = math.floor(scav.weapondefs[wname].stockpiletime / 3)
+                elseif tier == 3 then
+                    scav.weapondefs[wname].stockpiletime = 30
+                elseif tier == 4 then
+                    scav.weapondefs[wname].stockpiletime = 10
+                end
+                -- Tier 1 remains unchanged (normal)
+            end
         end
 
         scav.weapons = {}
@@ -35,11 +47,11 @@ local function makeSilo(beaconName)
     end
 end
 
-makeSilo("scavbeacon_t1")
-makeSilo("scavbeacon_t2")
-makeSilo("scavbeacon_t3")
-makeSilo("scavbeacon_t4")
-makeSilo("scavbeacon_t1_scav")
-makeSilo("scavbeacon_t2_scav")
-makeSilo("scavbeacon_t3_scav")
-makeSilo("scavbeacon_t4_scav")
+makeSilo("scavbeacon_t1", 1)
+makeSilo("scavbeacon_t2", 2)
+makeSilo("scavbeacon_t3", 3)
+makeSilo("scavbeacon_t4", 4)
+makeSilo("scavbeacon_t1_scav", 1)
+makeSilo("scavbeacon_t2_scav", 2)
+makeSilo("scavbeacon_t3_scav", 3)
+makeSilo("scavbeacon_t4_scav", 4)
