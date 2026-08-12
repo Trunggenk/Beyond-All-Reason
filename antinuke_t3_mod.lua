@@ -35,6 +35,18 @@ local function createT3AntiNuke(faction, baseUnit, newUnit)
         t3.customparams.i18n_en_humanname = "T3 Anti-Nuke"
         t3.customparams.i18n_en_tooltip = "Extended Range Anti-Nuke (Cheaper/Faster stockpiling)"
 
+        -- Use scavenger variant build pictures
+        t3.buildpic = "scavengers/" .. string.upper(baseUnit) .. ".DDS"
+        t3.icontype = baseUnit
+
+        -- Apply the scav .s3o object model
+        local oldObjectName = string.lower(t3.objectname or "")
+        -- Check if it contains "units/" to strip it.
+        local baseName = oldObjectName:match("([^/]+)$")
+        if baseName then
+            t3.objectname = "scavs/" .. baseName
+        end
+
         -- Apply a model scale to distinguish it visually
         if t3.customparams.modelscale then
             t3.customparams.modelscale = tostring(tonumber(t3.customparams.modelscale) * 1.5)
@@ -52,6 +64,8 @@ local function createT3AntiNuke(faction, baseUnit, newUnit)
             wdef.metalpershot = math.floor((wdef.metalpershot or 150) * 0.9) -- 10% less metal cost
             wdef.customparams = wdef.customparams or {}
             wdef.customparams.stockpilelimit = 30 -- Limit to 30
+            -- Note: Some game variants enforce limit directly on wdef, we set both to be safe
+            wdef.stockpilelimit = 30
         end
 
         UnitDefs[newUnit] = t3
