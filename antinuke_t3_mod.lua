@@ -27,12 +27,13 @@ local function createT3AntiNuke(faction, baseUnit, newUnit)
         -- Modifying unit properties
         t3.name = (t3.name or baseUnit) .. " T3"
         t3.health = t2.health * 2.5
-        t3.metalcost = t2.metalcost + 200
-        -- Revert changes to energycost and buildtime (keep them same as original t2)
+        t3.metalcost = t2.metalcost * 3
+        t3.energycost = t2.energycost * 3
+        t3.buildtime = t2.buildtime * 3
 
         t3.customparams = t3.customparams or {}
         t3.customparams.i18n_en_humanname = "T3 Anti-Nuke"
-        t3.customparams.i18n_en_tooltip = "Anti-Nuke (Faster stockpiling)"
+        t3.customparams.i18n_en_tooltip = "Extended Range Anti-Nuke (Cheaper/Faster stockpiling)"
 
         -- Use scavenger variant build pictures
         t3.buildpic = "scavengers/" .. string.upper(baseUnit) .. ".DDS"
@@ -57,10 +58,13 @@ local function createT3AntiNuke(faction, baseUnit, newUnit)
         local wdefName = next(t3.weapondefs)
         if wdefName then
             local wdef = t3.weapondefs[wdefName]
-            -- Keep original coverage, cost, velocity, and acceleration
+            wdef.coverage = (wdef.coverage or 2000) * 2 -- Double protection range
             wdef.stockpiletime = math.floor((wdef.stockpiletime or 90) / 3) -- 1/3 stockpile time
+            wdef.energypershot = math.floor((wdef.energypershot or 7500) * 0.9) -- 10% less energy cost
+            wdef.metalpershot = math.floor((wdef.metalpershot or 150) * 0.9) -- 10% less metal cost
             wdef.customparams = wdef.customparams or {}
             wdef.customparams.stockpilelimit = 30 -- Limit to 30
+            -- Note: Some game variants enforce limit directly on wdef, we set both to be safe
             wdef.stockpilelimit = 30
         end
 
@@ -98,7 +102,7 @@ createT3AntiNuke("arm", "armamd", "armamdt3")
 createT3AntiNuke("cor", "corfmd", "corfmdt3")
 createT3AntiNuke("leg", "legabm", "legabmt3")
 
--- Apply the Visual Mod logic from User Input
+-- by CrossGamer -- Antinuke to ICBM Visuals
 for n, d in pairs(UnitDefs) do
     if d.weapondefs then
         for _, wDef in pairs(d.weapondefs) do
@@ -113,6 +117,11 @@ for n, d in pairs(UnitDefs) do
                 wDef.explosiongenerator = "custom:newnukecor"
                 wDef.soundstart = "nukelaunch"
                 wDef.soundhit = "nukecor"
+                wDef.weaponvelocity = 1600
+                wDef.weaponacceleration = 100
+                wDef.turnrate = 5500
+                wDef.metalpershot = 300
+                wDef.energypershot = 37500
                 wDef.stockpiletime = 50
                 wDef.areaofeffect = 1000
                 wDef.impulsefactor = 0
