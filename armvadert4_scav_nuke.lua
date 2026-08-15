@@ -9,6 +9,7 @@ local function makeMobileNuke(unitName)
         local targetUnit = UnitDefs[unitName]
         targetUnit.weapondefs = targetUnit.weapondefs or {}
 
+        -- Copy weapondefs from armsilo
         for wname, wdata in pairs(silo_wdefs) do
             targetUnit.weapondefs[wname] = {}
             for k, v in pairs(wdata) do
@@ -21,10 +22,14 @@ local function makeMobileNuke(unitName)
                     targetUnit.weapondefs[wname][k] = v
                 end
             end
+
+            if wname == "nuclear_missile" then
+                targetUnit.weapondefs[wname].stockpiletime = 1
+            end
         end
 
-        targetUnit.weapons = targetUnit.weapons or {}
-        local startIndex = #targetUnit.weapons
+        -- Overwrite weapons completely so the Nuke takes primary slot
+        targetUnit.weapons = {}
         for i, wdata in ipairs(silo_weapons) do
             local newWeapon = {}
             for k, v in pairs(wdata) do
